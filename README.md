@@ -29,6 +29,17 @@ Our journey began with an assessment of how traditional machine learning methods
 | Accuracy         |         0.43        |   0.20  |      0.31     |      0.35     |      -    |
 
 
+### Logistic Regression
+
+### KNN
+
+### Decision Tree
+
+### Random Forest
+
+### Camembert
+
+
 
 
 
