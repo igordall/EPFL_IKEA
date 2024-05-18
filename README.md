@@ -29,7 +29,7 @@ Our journey began with an assessment of how traditional machine learning methods
 | Accuracy         |         0.45        |   0.20  |      0.31     |      0.35     |      -    |
 
 
-Understanding the differences in these metrics is crucial for comprehending model performance. **Precision** quantifies the accuracy of positive <u>predictions</u>, highlighting the proportion of true positives among all positive predictions. **Recall** assesses the model's ability to <u>identify</u> all relevant instances, focusing on the proportion of actual positives correctly identified. **F1-score** provides a balance between precision and recall, useful in situations with uneven class distributions. **Accuracy** reflects the overall correctness of the model across all predictions, relevant when the classes are symmetric in size and the costs of false positives and false negatives are similar.
+Understanding the differences in these metrics is crucial for comprehending model performance. **Precision** quantifies the accuracy of positive <u>predictions</u>, highlighting the proportion of true positives among all positive predictions. **Recall** assesses the model's ability to identify all relevant instances, focusing on the proportion of actual positives correctly identified. **F1-score** provides a balance between precision and recall, useful in situations with uneven class distributions. **Accuracy** reflects the overall correctness of the model across all predictions, relevant when the classes are symmetric in size and the costs of false positives and false negatives are similar.
 
 In our case, the respective subsections are more or less even, suggesting balanced model performance in terms of handling different classes and types of errors. In subsequent sections, we will delve deeper into each model, exploring their advantages and limitations in detail.
 
@@ -37,7 +37,7 @@ In our case, the respective subsections are more or less even, suggesting balanc
 
 We selected Logistic Regression as our initial approach to explore how machine learning can predict sentence difficulties. This model is computationally efficient, enabling rapid training and prediction times. It operates by vectorizing sentences into a numerical form, which the machine learning algorithm utilizes to perform regression. A significant advantage of Logistic Regression is its interpretability; it directly reveals the influence of each predictor (regression coefficient) on the sentence difficulty.
 
-We divided the training data on an 80/20 basis, using 80% for training the model and the remaining 20% for testing. The results presented in the table above reflect this division. Although the regression model performs slightly better than other traditional models, it only exhibits moderate capability in accurately identifying sentence difficulties, with Precision and Recall values of 44% and 45%, respectively. This indicates that the model predicts and identifies less than the actual difficulty. 
+We divided the training data on an 80/20 basis, using 80% for training the model and the remaining 20% for testing. The results presented in the table above reflect this division. Although the regression model performs slightly better than other traditional models, it only exhibits moderate capability in accurately identifying sentence difficulties, with Precision and Recall values of 44% and 45%, respectively. This indicates that the model's predictions are correct 44% of the time when it predicts difficulty, and it successfully identifies 45% of all actual difficulties.
 
 To better understand potential errors, we will examine the confusion matrix for an overview and then delve into specific misclassification. The confusion matrix indicates a pronounced tendency to misclassify sentences in the middle difficulty range (B2 to C1). These sentences likely share more overlapping features with neighboring classes compared to those at the extremes, which tend to be more distinct.
 
@@ -96,7 +96,7 @@ print("Accuracy:", accuracy)
 
 We also used a k-Nearest Neighbors (kNN) algorithm to tackle the difficulty prediction. The principle behind kNN is to find a predefined number of training samples closest in distance to the new point and predict the label from these, relying on features from sentences that are believed to contribute to their difficulty. To compute the distance the algorithm will measure the similarity between sentences using sentences with similar lengths and complexities.
 
-Again using the technique 80/20, we got the results mentioned in the initial table. The outcome suggests poor predicting but better than identification capabilities, resulting in more false positives than false negatives 
+Again using the technique 80/20, we got the results mentioned in the initial table. The outcome suggests poor prediction with a Precision of 29% but still better than identification capabilities with a Recall of 19%, resulting in more false positives than false negatives.  
 
 
 ### Decision Tree
