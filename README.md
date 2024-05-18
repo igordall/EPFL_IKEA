@@ -11,6 +11,8 @@ Fr_sen : https://raw.githubusercontent.com/AlexPinel06/Team-IKEA-ML/main/data/fr
 
 ## Report 
 
+Starting the report ....
+
 |                  | Logistic Regression | KNN     | Decision Tree | Random Forest | Any other technique |
 |------------------|---------------------|---------|---------------|---------------|---------------------|
 | Precision        |                     |         |               |               |                     |
