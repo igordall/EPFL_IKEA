@@ -21,9 +21,24 @@ Fr_sen : https://raw.githubusercontent.com/AlexPinel06/Team-IKEA-ML/main/data/fr
 Our journey began with an assessment of how traditional machine learning methods performed on our dataset. After evaluating these initial approaches, we transitioned to using the state-of-the-art BERT model to enhance our predictive capabilities. The table below provides an overview of the performance of each model based on key metrics. In subsequent sections, we will delve deeper into each model, exploring their advantages and limitations in detail.
 
 
-|                  | Logistic Regression | KNN     | Decision Tree | Random Forest | camembert |
+|                  | Logistic Regression | KNN     | Decision Tree | Random Forest | Camembert |
 |------------------|---------------------|---------|---------------|---------------|-----------|
-| Precision        |                     |         |               |               |           |
-| Recall           |                     |         |               |               |           |
-| F1-score         |                     |         |               |               |           |
-| Accuracy         |                     |         |               |               |           |
+| Precision        |         0.43        |   0.29  |      0.31     |      0.37     |      -    |
+| Recall           |         0.30        |   0.19  |      0.31     |      0.39     |      -    |
+| F1-score         |         0.27        |   0.11  |      0.31     |      0.37     |      -    |
+| Accuracy         |         0.43        |   0.20  |      0.31     |      0.35     |      -    |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
