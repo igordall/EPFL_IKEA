@@ -94,15 +94,15 @@ print("Accuracy:", accuracy)
 
 ### KNN
 
-We also used a k-Nearest Neighbors (kNN) algorithm to tackle the difficulty prediction. The principle behind kNN is to find a predefined number of training samples closest in distance to the new point and predict the label from these, relying on features from sentences that are believed to contribute to their difficulty. To compute the distance the algorithm will measure the similarity between sentences using sentences with similar lengths and complexities.
+We also used a k-Nearest Neighbors (kNN) algorithm for predicting difficulty. The kNN algorithm works by finding a set number of training examples that are closest to a new data point and using their labels to make a prediction. It calculates how close each sentence is to others based, for instance, on similar sentence lengths and complexities.
 
-Again using the technique 80/20, we got the results mentioned in the initial table. The outcome suggests poor prediction with a Precision of 29% but still better than identification capabilities with a Recall of 19%, resulting in more false positives than false negatives.  
+Using the 80/20 technique again, we obtained the results presented in the initial table. The outcome suggests poor prediction performance, with a Precision of 29%. However, the identification capabilities are even lower, with a Recall of 19%, resulting in more false positives than false negatives.
 
-To better understand the reason why the model fails to properly assess the difficulty, visioning the confusion matrix helps us to identify that the vast majority of predictions go for A1 resulting in a lot of false positives. This suggests that the model relies heavily on common words which does not carry much discriminative information about the complexity or difficulty of a sentence.
+To better understand why the model fails to properly assess difficulty, examining the confusion matrix helps. It reveals that the vast majority of predictions are for A1, resulting in many false positives. This suggests that the model relies heavily on common words, which do not carry much discriminative information about the complexity or difficulty of a sentence.
 
 <img width="500" alt="Capture d’écran 2024-05-18 à 19 12 59" src="https://github.com/igordall/EPFL_IKEA/assets/153678341/ca1916f7-1333-440d-a50d-28909fa3c0e5">
 
-To dive deeper we plotted the most frequent words in misclassified sentences, which results in words such as (de, la, et, les, etc.). This shows that our model is overly influenced by common French articles, prepositions, and conjunctions, influencing the clustering of points aggregated around the A1 prediction. Indeed, in this C1 misclassified sentence to A1, there is there is "de, la, et"  located several times "La raison de cette ambivalence précède l'existence des robots et même leur nom: elle est culturelle et se cache dans le vieux mythe du Golem remis à l'honneur en Occident par Frankenstein de Mary Shelley en 1818.".
+To dive deeper, we plotted the most frequent words in misclassified sentences, which include words like "de," "la," "et," and "les." This shows that our model is overly influenced by common French articles, prepositions, and conjunctions, leading to clustering around the A1 prediction. For instance, in the following misclassified C1 sentence as A1, there are several occurrences of "de," "la," and "et": "La raison de cette ambivalence précède l'existence des robots et même leur nom: elle est culturelle et se cache dans le vieux mythe du Golem remis à l'honneur en Occident par Frankenstein de Mary Shelley en 1818."
 
 To prevent this issue removing common stop words during the vectorization process would help the model focus on more meaningful features. You can find the code used in the following lines : 
 
