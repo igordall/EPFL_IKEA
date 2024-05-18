@@ -1,24 +1,35 @@
-# EPFL_IKEA
+# EPFL_IKEA: AI-Powered French Text Difficulty Prediction
 
+## Project Overview
 
-## Background 
+In this project, Alex and I harness artificial intelligence to predict the difficulty levels of French texts. Our experience as native French speakers who have learned English informs our appreciation for matching language learners with texts of appropriate complexity. This GitHub repository documents our journey from participating in a Kaggle competition to developing a model that leverages our fluency to benefit language learners worldwide.
 
-In this GitHub project, Alex and I aim to predict the difficulty level of French texts using artificial intelligence. As native French speakers who have learned English, we understand the importance of engaging with texts that match our comprehension level. Learning with appropriately challenging texts can significantly enhance the learning process by introducing increasingly difficult material at a manageable pace.
+## Data Resources
 
-Prompted by these insights, we participated in a Kaggle competition to find the most effective prediction model. This competition inspired us to develop a model that not only aids in language learning but also leverages our native fluency in French. Our goal is to determine the difficulty level of unfamiliar texts using the Common European Framework of Reference for Languages (CEFR) scale from A1 to C2. To achieve this, we have a training dataset comprising 4,800 French sentences, each annotated with its actual difficulty level. Additionally, we will evaluate our model’s accuracy using an unlabeled dataset.
+We used the following datasets for training and evaluating our model:
 
-## Data Used 
-sample submission: https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/sample_submission.csv
+- **Training Data:** [Training Dataset](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/training_data.csv)
+- **Unlabelled Test Data:** [Test Dataset](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/unlabelled_test_data.csv)
+- **Sample Submission:** [Sample Submission File](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/sample_submission.csv)
+- **Additional Sentences:** [French Sentences](https://raw.githubusercontent.com/AlexPinel06/Team-IKEA-ML/main/data/french_sentences_realistic.csv)
 
-training data: https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/training_data.csv
+## Model Development and Performance
 
-unlabelled test data: https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/unlabelled_test_data.csv
+### Initial Machine Learning Approaches
 
-Fr_sen : https://raw.githubusercontent.com/AlexPinel06/Team-IKEA-ML/main/data/french_sentences_realistic.csv
+Our journey began by testing traditional machine learning methods:
+- Logistic Regression
+- K-Nearest Neighbors (KNN)
+- Decision Tree
+- Random Forest
 
-## Model used
+### Advanced Modeling with BERT
 
-Our journey began with an assessment of how traditional machine learning methods performed on our dataset (Logistic Regression, KNN, Decision Tree, and Random Forest). After evaluating these initial approaches, we transitioned to using the state-of-the-art BERT model to enhance our predictive capabilities. The table below provides an overview of the performance of each model based on key metrics. 
+After initial experiments, we integrated the BERT model to enhance our prediction capabilities, focusing on its advanced contextual understanding of language.
+
+### Performance Metrics Overview
+
+We assess our models using key metrics to ensure precision, recall, F1-score, and accuracy. Here's how each model performed:
 
 
 |                  | Logistic Regression | KNN     | Decision Tree | Random Forest | Camembert |
