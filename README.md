@@ -18,7 +18,7 @@ Fr_sen : https://raw.githubusercontent.com/AlexPinel06/Team-IKEA-ML/main/data/fr
 
 ## Model used
 
-Our journey began with an assessment of how traditional machine learning methods performed on our dataset. After evaluating these initial approaches, we transitioned to using the state-of-the-art BERT model to enhance our predictive capabilities. The table below provides an overview of the performance of each model based on key metrics. In subsequent sections, we will delve deeper into each model, exploring their advantages and limitations in detail.
+Our journey began with an assessment of how traditional machine learning methods performed on our dataset. After evaluating these initial approaches, we transitioned to using the state-of-the-art BERT model to enhance our predictive capabilities. The table below provides an overview of the performance of each model based on key metrics. 
 
 
 |                  | Logistic Regression | KNN     | Decision Tree | Random Forest | Camembert |
@@ -31,9 +31,11 @@ Our journey began with an assessment of how traditional machine learning methods
 
 Understanding the differences in these metrics is crucial for comprehending model performance. **Precision** quantifies the accuracy of positive predictions, highlighting the proportion of true positives among all positive predictions. **Recall** assesses the model's ability to identify all relevant instances, focusing on the proportion of actual positives correctly identified. **F1-score** provides a balance between precision and recall, useful in situations with uneven class distributions. **Accuracy** reflects the overall correctness of the model across all predictions, relevant when the classes are symmetric in size and the costs of false positives and false negatives are similar.
 
+In our case, the respective subsections are more or less even, suggesting balanced model performance in terms of handling different classes and types of errors. In subsequent sections, we will delve deeper into each model, exploring their advantages and limitations in detail.
+
 ### Logistic Regression
 
-We opted for the Logistic Regression to grasp the first insight into how ML could predict sentence difficulties. We split the training data into an 80/20 scale, training our model on 80% and testing on the remaining 20% which gave us the score in the table above.  
+We opted for the Logistic Regression to grasp the first insight into how ML could predict sentence difficulties. We split the training data into an 80/20 scale, training our model on 80% and testing on the remaining 20% which gave us the score in the table above. We can spot pretty good results suggesting  
 
 ### KNN
 
