@@ -43,7 +43,7 @@ To better understand potential errors, we will examine the confusion matrix for 
 
 <img width="500" alt="Capture d’écran 2024-05-18 à 16 56 37" src="https://github.com/igordall/EPFL_IKEA/assets/153678341/a8df770f-2c11-4a0e-b3fa-660cbdb4f858">
 
-For a more detailed analysis, consider the mispredicted sentence "Un service précieux qui a sans doute permis de sauver des vies," which was erroneously classified as C1 when its actual difficulty level is A2. An examination of the vectorization and predictors reveals that the five most influential features leading to a C1 prediction are common determiners and prepositions such as "des," "sa," "les," "de," and "du" (equivalent to English "the," "those," or "some"). These words, typically neutral regarding difficulty level, suggest the model may not adequately capture the complexity of technical vocabulary or sentence structure, such as technical vocabulary, grammar or punctuation. However, the model accurately predicts that longer sentences are typically more difficult, as demonstrated by the correctly C1 classified sentence "En attribuant une valeur de flux potentiel aux liens du graphe, la segmentation fondée sur le critère de modularité aboutit à un découpage considéré comme optimal du point de vue de la dynamique démographique interne à chaque compartiment." 
+For a more detailed analysis, consider the mispredicted sentence "Un service précieux qui a sans doute permis de sauver des vies," which was erroneously classified as C1 when its actual difficulty level is A2. An examination of the vectorization and predictors reveals that the five most influential features leading to a C1 prediction are common determiners and prepositions such as "des," "sa," "les," "de," and "du" (equivalent to English "the," "those," or "some"). These words, typically neutral regarding difficulty level, suggest the model may not adequately capture the complexity of technical vocabulary, grammar, or punctuation. However, the model accurately predicts that longer sentences are typically more difficult, as demonstrated by the correctly C1 classified sentence "En attribuant une valeur de flux potentiel aux liens du graphe, la segmentation fondée sur le critère de modularité aboutit à un découpage considéré comme optimal du point de vue de la dynamique démographique interne à chaque compartiment." 
 
 Those limitations suggest further refinement is needed to enhance the model’s ability to differentiate between linguistic complexity and common vocabulary. You can find the used code below: 
 
@@ -98,11 +98,61 @@ We also used a k-Nearest Neighbors (kNN) algorithm to tackle the difficulty pred
 
 Again using the technique 80/20, we got the results mentioned in the initial table. The outcome suggests poor prediction with a Precision of 29% but still better than identification capabilities with a Recall of 19%, resulting in more false positives than false negatives.  
 
-To better understand the reason why the model fails to properly assess the difficulty, visioning the confusion matrix helps us to identify that the vast majority of predictions go for A1 resulting in a lot of false positives. 
+To better understand the reason why the model fails to properly assess the difficulty, visioning the confusion matrix helps us to identify that the vast majority of predictions go for A1 resulting in a lot of false positives. This suggests that the model relies heavily on common words which does not carry much discriminative information about the complexity or difficulty of a sentence.
 
 <img width="500" alt="Capture d’écran 2024-05-18 à 19 12 59" src="https://github.com/igordall/EPFL_IKEA/assets/153678341/ca1916f7-1333-440d-a50d-28909fa3c0e5">
 
+To dive deeper we plotted the most frequent words in misclassified sentences, which results in words such as (de, la, et, les, etc.). This shows that our model is overly influenced by common French articles, prepositions, and conjunctions, influencing the clustering of points aggregated around the A1 prediction. Indeed, in this C1 misclassified sentence to A1, there is there is "de, la, et"  located several times "La raison de cette ambivalence précède l'existence des robots et même leur nom: elle est culturelle et se cache dans le vieux mythe du Golem remis à l'honneur en Occident par Frankenstein de Mary Shelley en 1818.".
 
+To prevent this issue removing common stop words during the vectorization process would help the model focus on more meaningful features. You can find the code used in the following lines : 
+
+```python
+from sklearn.metrics import accuracy_score, classification_report, precision_score, recall_score, f1_score
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.preprocessing import LabelEncoder
+from sklearn.neighbors import KNeighborsClassifier
+import pandas as pd
+
+# Assuming df_training is your DataFrame containing sentences and their corresponding difficulty levels
+df_KNN = df_training.copy()
+
+# Initialize the vectorizer to convert text to a frequency vector
+vectorizer = CountVectorizer()
+
+# Apply transformation to text
+X = vectorizer.fit_transform(df_KNN['sentence'])
+
+# Encode difficulty labels
+label_encoder = LabelEncoder()
+y = label_encoder.fit_transform(df_KNN['difficulty'])
+
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create the KNN model
+knn_classifier = KNeighborsClassifier(n_neighbors=5)
+
+# Train the model
+knn_classifier.fit(X_train, y_train)
+
+# Predict on the test set
+y_pred = knn_classifier.predict(X_test)
+
+# Calculate metrics
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred, average='weighted')  # Weighted average considers class imbalance
+recall = recall_score(y_test, y_pred, average='weighted')
+f1 = f1_score(y_test, y_pred, average='weighted')
+
+# Print the calculated metrics
+print("Accuracy:", accuracy)
+print("Precision:", precision)
+print("Recall:", recall)
+print("F1-score:", f1)
+print("Accuracy:", accuracy)
+```
+"curse of dimensionality" 
 
 ### Decision Tree
 
