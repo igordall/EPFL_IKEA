@@ -35,7 +35,7 @@ In our case, the respective subsections are more or less even, suggesting balanc
 
 ### Logistic Regression
 
-We opted for the Logistic Regression to grasp the first insight into how ML could predict sentence difficulties. We split the training data into an 80/20 scale, training our model on 80% and testing on the remaining 20% which gave us the score in the table above. We can spot pretty good results suggesting  
+We opted for the Logistic Regression to grasp the first insight into how ML could predict sentence difficulties. We split the training data into an 80/20 scale, training our model on 80% and testing on the remaining 20% which gave us the score in the table above. 
 
 ### KNN
 
