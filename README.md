@@ -23,17 +23,17 @@ Our journey began with an assessment of how traditional machine learning methods
 
 |                  | Logistic Regression | KNN     | Decision Tree | Random Forest | Camembert |
 |------------------|---------------------|---------|---------------|---------------|-----------|
-| Precision        |         0.43        |   0.29  |      0.31     |      0.37     |      -    |
-| Recall           |         0.30        |   0.19  |      0.31     |      0.39     |      -    |
-| F1-score         |         0.27        |   0.11  |      0.31     |      0.37     |      -    |
-| Accuracy         |         0.43        |   0.20  |      0.31     |      0.35     |      -    |
+| Precision        |         0.44        |   0.29  |      0.31     |      0.37     |      -    |
+| Recall           |         0.45        |   0.19  |      0.31     |      0.39     |      -    |
+| F1-score         |         0.44        |   0.11  |      0.31     |      0.37     |      -    |
+| Accuracy         |         0.45        |   0.20  |      0.31     |      0.35     |      -    |
 
 
 Understanding the differences in these metrics is crucial for comprehending model performance. **Precision** quantifies the accuracy of positive predictions, highlighting the proportion of true positives among all positive predictions. **Recall** assesses the model's ability to identify all relevant instances, focusing on the proportion of actual positives correctly identified. **F1-score** provides a balance between precision and recall, useful in situations with uneven class distributions. **Accuracy** reflects the overall correctness of the model across all predictions, relevant when the classes are symmetric in size and the costs of false positives and false negatives are similar.
 
 ### Logistic Regression
 
-Starting with the straightforward Logistic Regression was nice to grasp a first understanding. 
+We opted for the Logistic Regression to grasp the first insight into how ML could predict sentence difficulties. We split the training data into an 80/20 scale, training our model on 80% and testing on the remaining 20% which gave us the score in the table above.  
 
 ### KNN
 
