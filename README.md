@@ -88,7 +88,9 @@ f1 = f1_score(y_test, y_pred, average='weighted')
 print("Precision:", precision)
 print("Recall:", recall)
 print("F1-score:", f1)
-print("Accuracy:", accuracy)```
+print("Accuracy:", accuracy)
+
+```
 
 
 ### KNN
