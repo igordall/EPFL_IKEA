@@ -89,6 +89,7 @@ print("Precision:", precision)
 print("Recall:", recall)
 print("F1-score:", f1)
 print("Accuracy:", accuracy)
+'''
 
 ### KNN
 
