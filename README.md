@@ -39,7 +39,7 @@ We selected Logistic Regression as our initial approach to explore how machine l
 
 We divided the training data on an 80/20 basis, using 80% for training the model and the remaining 20% for testing. The results presented in the table above reflect this division. Although the regression model performs slightly better than other traditional models, it only exhibits moderate capability in accurately identifying sentence difficulties, with Precision and Recall values of 44% and 45%, respectively. This indicates that the model's predictions are correct 44% of the time when it predicts difficulty, and it successfully identifies 45% of all actual difficulties.
 
-To better understand potential errors, we will examine the confusion matrix for an overview and then delve into specific misclassification. The confusion matrix indicates a pronounced tendency to misclassify sentences in the middle difficulty range (B2 to C1). These sentences likely share more overlapping features with neighboring classes compared to those at the extremes, which tend to be more distinct.
+To better understand potential errors, we will examine the confusion matrix for an overview and then delve into specific misclassification. The confusion matrix, based on predicted and actual values, indicates a pronounced tendency to misclassify sentences in the middle difficulty range (B2 to C1). These sentences likely share more overlapping features with neighboring classes compared to those at the extremes, which tend to be more distinct.
 
 <img width="462" alt="Capture d’écran 2024-05-18 à 16 56 37" src="https://github.com/igordall/EPFL_IKEA/assets/153678341/a8df770f-2c11-4a0e-b3fa-660cbdb4f858">
 
@@ -97,6 +97,10 @@ print("Accuracy:", accuracy)
 We also used a k-Nearest Neighbors (kNN) algorithm to tackle the difficulty prediction. The principle behind kNN is to find a predefined number of training samples closest in distance to the new point and predict the label from these, relying on features from sentences that are believed to contribute to their difficulty. To compute the distance the algorithm will measure the similarity between sentences using sentences with similar lengths and complexities.
 
 Again using the technique 80/20, we got the results mentioned in the initial table. The outcome suggests poor prediction with a Precision of 29% but still better than identification capabilities with a Recall of 19%, resulting in more false positives than false negatives.  
+
+To better understand the reason why the model fails to properly assess the difficulty, visioning the confusion matrix helps us to identify that the vast majority of predictions go for A1 resulting in a lot of false positives. 
+
+<img width="705" alt="Capture d’écran 2024-05-18 à 19 07 29" src="https://github.com/igordall/EPFL_IKEA/assets/153678341/0fc704a3-c17b-4ccc-a37a-6a44d8281441">
 
 
 ### Decision Tree
