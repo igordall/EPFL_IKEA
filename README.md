@@ -31,6 +31,8 @@ Our journey began with an assessment of how traditional machine learning methods
 
 ### Logistic Regression
 
+Starting with the Logistic Regression was evident ...
+
 ### KNN
 
 ### Decision Tree
