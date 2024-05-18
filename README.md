@@ -39,7 +39,9 @@ We selected Logistic Regression as our initial approach to explore how machine l
 
 We divided the training data on an 80/20 basis, using 80% for training the model and the remaining 20% for testing, which yielded the results presented in the table above. While traditional models also perform adequately, they exhibit only a moderate capability to accurately identify sentence difficulties, with a Recall of 45%.
 
-To better understand potential errors, we will examine the confusion matrix for an overview and then delve into specific misclassifications. The confusion matrix indicates a pronounced tendency to misclassify sentences in the middle difficulty range (B2 to C1). These sentences likely share more overlapping features with neighboring classes compared to those at the extremes, which tend to be more distinct.
+To better understand potential errors, we will examine the confusion matrix for an overview and then delve into specific misclassification. 
+
+The confusion matrix indicates a pronounced tendency to misclassify sentences in the middle difficulty range (B2 to C1). These sentences likely share more overlapping features with neighboring classes compared to those at the extremes, which tend to be more distinct.
 
 <img width="462" alt="Capture d’écran 2024-05-18 à 16 56 37" src="https://github.com/igordall/EPFL_IKEA/assets/153678341/a8df770f-2c11-4a0e-b3fa-660cbdb4f858">
 
