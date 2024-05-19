@@ -61,55 +61,37 @@ Those limitations suggest further refinement is needed to enhance the model’s 
 ```python
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.preprocessing import LabelEncoder
 
 df = df_training.copy()
 
-# Divide data into features (X) and target (y)
 X = df['sentence']
-y = df['difficulty']
-
-# Convert difficulty labels into numeric values
-from sklearn.preprocessing import LabelEncoder
 label_encoder = LabelEncoder()
-y = label_encoder.fit_transform(y)
+y = label_encoder.fit_transform(df['difficulty'])
 
-# Split data into training and testing set (80/20)
-from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Create a numeric representation of sentences using TF-IDF
-from sklearn.feature_extraction.text import TfidfVectorizer
 vectorizer = TfidfVectorizer()
 X_train_tfidf = vectorizer.fit_transform(X_train)
 X_test_tfidf = vectorizer.transform(X_test)
 
-# Train a logistic regression model
 model = LogisticRegression()
 model.fit(X_train_tfidf, y_train)
-
-# Predict on the test set
 y_pred = model.predict(X_test_tfidf)
 
-# Calculate metrics
-accuracy = accuracy_score(y_test, y_pred)
-precision = precision_score(y_test, y_pred, average='weighted')  # Use 'weighted' for imbalanced classes
-recall = recall_score(y_test, y_pred, average='weighted')
-f1 = f1_score(y_test, y_pred, average='weighted')
-
-print("Precision:", precision)
-print("Recall:", recall)
-print("F1-score:", f1)
-print("Accuracy:", accuracy)
-
+metrics = precision_score(y_test, y_pred, average='weighted'), recall_score(y_test, y_pred, average='weighted'), f1_score(y_test, y_pred, average='weighted')
+print(f"Precision: {metrics[0]:.2f}, Recall: {metrics[1]:.2f}, F1-Score: {metrics[2]:.2f}, Accuracy: {accuracy_score(y_test, y_pred):.2f}")
 ```
 
 ### KNN
 
-We also used a k-Nearest Neighbors (kNN) algorithm for predicting difficulty. The kNN algorithm works by finding a set number of training examples that are closest to a new data point and using their labels to make a prediction. It calculates how close each sentence is to others based, for instance, on similar sentence lengths and complexities.
+We then tackled classification algorithms to predict difficulty, methods that assign predefined categories or labels to new instances based on their features. Indeed, the kNN algorithm works by finding a set number of training examples that are closest to a new data point and using their labels to make a prediction. It calculates how close each sentence is to others based, for instance, on similar sentence lengths and complexities.
 
 Using the 80/20 technique again, we obtained the results presented in the initial table. The outcome suggests poor prediction performance, with a Precision of 29%. However, the identification capabilities are even lower, with a Recall of 19%, resulting in more false positives than false negatives.
 
-To better understand why the model fails to properly assess difficulty, examining the confusion matrix helps. It reveals that the vast majority of predictions are for A1, resulting in many false positives. This suggests that the model relies heavily on common words, which do not carry much discriminative information about the complexity or difficulty of a sentence.
+To better understand why the model fails to properly assess difficulty, examining the confusion matrix helps. It reveals that the vast majority of predictions are for A1, resulting in many false positives. This suggests that the model relies heavily on common words to cluster difficulty labels, which do not carry much discriminative information about the complexity or difficulty of a sentence.
 
 <img width="500" alt="Capture d’écran 2024-05-18 à 19 12 59" src="https://github.com/igordall/EPFL_IKEA/assets/153678341/ca1916f7-1333-440d-a50d-28909fa3c0e5">
 
@@ -118,57 +100,94 @@ To dive deeper, we plotted the most frequent words in misclassified sentences, w
 To prevent this issue removing common stop words during the vectorization process would help the model focus on more meaningful features. You can find the code used in the following lines : 
 
 ```python
-from sklearn.metrics import accuracy_score, classification_report, precision_score, recall_score, f1_score
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import LabelEncoder
-from sklearn.neighbors import KNeighborsClassifier
 import pandas as pd
 
-# Assuming df_training is your DataFrame containing sentences and their corresponding difficulty levels
 df_KNN = df_training.copy()
 
-# Initialize the vectorizer to convert text to a frequency vector
 vectorizer = CountVectorizer()
-
-# Apply transformation to text
 X = vectorizer.fit_transform(df_KNN['sentence'])
-
-# Encode difficulty labels
 label_encoder = LabelEncoder()
 y = label_encoder.fit_transform(df_KNN['difficulty'])
 
-# Split data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Create the KNN model
 knn_classifier = KNeighborsClassifier(n_neighbors=5)
-
-# Train the model
 knn_classifier.fit(X_train, y_train)
-
-# Predict on the test set
 y_pred = knn_classifier.predict(X_test)
 
-# Calculate metrics
-accuracy = accuracy_score(y_test, y_pred)
-precision = precision_score(y_test, y_pred, average='weighted')  # Weighted average considers class imbalance
-recall = recall_score(y_test, y_pred, average='weighted')
-f1 = f1_score(y_test, y_pred, average='weighted')
-
-# Print the calculated metrics
-print("Accuracy:", accuracy)
-print("Precision:", precision)
-print("Recall:", recall)
-print("F1-score:", f1)
-print("Accuracy:", accuracy)
+metrics = precision_score(y_test, y_pred, average='weighted'), recall_score(y_test, y_pred, average='weighted'), f1_score(y_test, y_pred, average='weighted')
+print(f"Accuracy: {accuracy_score(y_test, y_pred):.2f}, Precision: {metrics[0]:.2f}, Recall: {metrics[1]:.2f}, F1-Score: {metrics[2]:.2f}")
 ```
-"curse of dimensionality" 
 
 ### Decision Tree
 
+Another classification algorithm is the decision tree, which operates by creating a model that predicts the value of a target variable by learning simple decision rules inferred from the data features. The model is structured as a tree where each internal node represents a "test" on an attribute (in our case, whether a word or a sentence), each branch represents the outcome of the test, and each leaf node represents a class label (in our case, the difficulty).  
+
+Again using the 80/20 technique yielded the results from the table above, suggesting an even distribution among the classes and types of errors. 
+
+<img width="500" alt="Capture d’écran 2024-05-19 à 10 31 28" src="https://github.com/igordall/EPFL_IKEA/assets/153678341/4c4e5dee-f5c1-4925-a2ea-53558e75a6c2">
+
+```python
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+
+# Load and prepare the dataset
+df_DT = df_training.copy()  # Assuming df_training is predefined
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(df_DT['sentence'])  # Convert text to word frequency vectors
+label_encoder = LabelEncoder()
+y = label_encoder.fit_transform(df_DT['difficulty'])  # Encode labels
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train the decision tree classifier
+dt_classifier = DecisionTreeClassifier(random_state=42)
+dt_classifier.fit(X_train, y_train)
+
+# Predict and calculate metrics
+y_pred = dt_classifier.predict(X_test)
+precision, recall, f1_score, _ = precision_recall_fscore_support(y_test, y_pred, average='weighted')
+accuracy = accuracy_score(y_test, y_pred)
+
+# Print results
+print(f"Precision: {precision:.2f}, Recall: {recall:.2f}, F1-Score: {f1_score:.2f}, Accuracy: {accuracy:.2f}")
+```
 ### Random Forest
 
+```python
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+
+df_RF = df_training.copy()  # Load your data
+
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(df_RF['sentence'])
+label_encoder = LabelEncoder()
+y = label_encoder.fit_transform(df_RF['difficulty'])
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
+rf_classifier.fit(X_train, y_train)
+y_pred = rf_classifier.predict(X_test)
+
+metrics = precision_recall_fscore_support(y_test, y_pred, average='weighted')
+print(f"Precision: {metrics[0]:.2f}, Recall: {metrics[1]:.2f}, F1-Score: {metrics[2]:.2f}, Accuracy: {accuracy_score(y_test, y_pred):.2f}")
+```
 ### Camembert
 
 
