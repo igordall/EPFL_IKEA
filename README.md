@@ -47,7 +47,7 @@ In our case, the respective subsections are more or less even, suggesting balanc
 
 ### Logistic Regression
 
-We chose Logistic Regression as our initial method to explore the prediction of sentence difficulties using machine learning. This model is known for its computational efficiency, which allows for quick training and prediction times. It works by converting sentences into numerical data that the algorithm uses to predict difficulty levels. One of the major strengths of Logistic Regression is its interpretability; it provides clear insight into how each feature (regression coefficient) impacts the prediction of sentence difficulty.
+We selected Logistic Regression as our initial method to explore predicting sentence difficulties using machine learning. This model stands out for its computational efficiency, facilitating swift training and prediction processes. Logistic Regression operates by first converting sentences into numerical form—specifically, by creating features based on the characteristics of the sentences, such as word frequency, sentence length, and syntax complexity. The model then applies these numerical features to a logistic function, which estimates the probability that a sentence belongs to a particular difficulty category. A significant strength of Logistic Regression is its interpretability; it provides clear insights by showing how each feature’s weight (regression coefficient) influences the predicted difficulty level, allowing for easier adjustments and understanding of the model's decisions.
 
 We split the training data using an 80/20 ratio, with 80% used for training the model and the remaining 20% for testing. The results, as shown in the table above, reflect this setup. The regression model slightly outperforms other traditional models, but it only moderately succeeds in accurately determining sentence difficulties, achieving Precision and Recall rates of 44% and 45%, respectively. This means the model correctly predicts sentence difficulty 44% of the time and accurately identifies 45% of all actual difficult sentences.
 
@@ -88,7 +88,7 @@ print(f"Precision: {metrics[0]:.2f}, Recall: {metrics[1]:.2f}, F1-Score: {metric
 
 ### KNN
 
-We then tackled classification algorithms to predict difficulty, methods that assign predefined categories or labels to new instances based on their features. Indeed, the kNN algorithm works by finding a set number of training examples that are closest to a new data point and using their labels to make a prediction. It calculates how close each sentence is to others based, for instance, on similar sentence lengths and complexities.
+Following our use of Logistic Regression, we explored another approach using the k-Nearest Neighbors (kNN) classification algorithm to predict sentence difficulties. This method categorizes sentences by assigning them to predefined difficulty levels based on their features. Specifically, kNN operates by identifying a specified number of training examples that are closest to a new sentence in terms of feature similarity—such as sentence length and complexity. It then predicts the difficulty level of the new sentence based on the most common categories among these nearest neighbors. This method relies heavily on the assumption that similar sentences share similar difficulty levels, making it particularly effective when clear patterns of similarity exist within the data.
 
 Using the 80/20 technique again, we obtained the results presented in the initial table. The outcome suggests poor prediction performance, with a Precision of 29%. However, the identification capabilities are even lower, with a Recall of 19%, resulting in more false positives than false negatives.
 
@@ -127,7 +127,7 @@ print(f"Accuracy: {accuracy_score(y_test, y_pred):.2f}, Precision: {metrics[0]:.
 
 ### Decision Tree
 
-Another classification algorithm is the decision tree, which operates by creating a model that predicts the value of a target variable by learning simple decision rules inferred from the data features. The model is structured as a tree where each internal node represents a "test" on an attribute (in our case, whether a word or a sentence), each branch represents the outcome of the test, and each leaf node represents a class label (in our case, the difficulty).  
+We further expanded our exploration of machine learning models for predicting sentence difficulties by implementing a Decision Tree algorithm. This classification method predicts the difficulty level of sentences by constructing a model that learns simple decision rules from the data features. In our application, the model is visualized as a tree structure: each internal node represents a "test" related to an attribute of the sentence, such as the presence of specific words or the complexity of the sentence structure. Each branch stemming from these nodes denotes the outcome of the test, and each leaf node corresponds to a class label, which in this case is the predicted difficulty level. This hierarchical approach allows the Decision Tree to make clear and logical decisions based on the hierarchical significance of sentence features, making it both interpretable and effective for tasks with well-defined rules and distinctions between categories.
 
 Again using the 80/20 technique yielded the results from the table above, suggesting an even distribution among the classes and types of errors. 
 
@@ -164,6 +164,12 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"Precision: {precision:.2f}, Recall: {recall:.2f}, F1-Score: {f1_score:.2f}, Accuracy: {accuracy:.2f}")
 ```
 ### Random Forest
+
+Continuing with our exploration of machine learning techniques for predicting sentence difficulties, we implemented the Random Forest algorithm. This advanced classification method extends the concept of decision trees by creating an ensemble of decision trees trained on different subsets of the data and using different subsets of features at each split within those trees. Each tree in the forest makes its own prediction, and the final output is determined by the majority vote across all trees. This approach not only enhances the predictive accuracy by reducing the risk of overfitting associated with single decision trees but also maintains good interpretability, as it allows for an analysis of feature importance across multiple trees. Random Forest is particularly robust and effective in dealing with both large datasets and datasets with a high dimensionality of features, making it well-suited for complex classification tasks like predicting the difficulty of sentences.
+
+
+
+
 
 ```python
 import pandas as pd
