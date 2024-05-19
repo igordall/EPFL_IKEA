@@ -35,10 +35,10 @@ We assess our models using key metrics to ensure precision, recall, F1-score, an
 
 |                  | Logistic Regression | KNN     | Decision Tree | Random Forest | Camembert |
 |------------------|---------------------|---------|---------------|---------------|-----------|
-| Precision        |         0.44        |   0.29  |      0.31     |      0.37     |      -    |
-| Recall           |         0.45        |   0.20  |      0.31     |      0.39     |      -    |
-| F1-score         |         0.44        |   0.11  |      0.31     |      0.37     |      -    |
-| Accuracy         |         0.45        |   0.20  |      0.31     |      0.35     |      -    |
+| Precision        |         0.44        |   0.29  |      0.31     |      0.39     |      -    |
+| Recall           |         0.45        |   0.20  |      0.31     |      0.37     |      -    |
+| F1-score         |         0.44        |   0.11  |      0.31     |      0.35     |      -    |
+| Accuracy         |         0.45        |   0.20  |      0.31     |      0.37     |      -    |
 
 
 Understanding the differences in these metrics is crucial for comprehending model performance. **Precision** quantifies the accuracy of positive <u>predictions</u>, highlighting the proportion of true positives among all positive predictions. **Recall** assesses the model's ability to identify all relevant instances, focusing on the proportion of actual positives correctly identified. **F1-score** balances precision and recall, useful in situations with uneven class distributions. **Accuracy** reflects the overall correctness of the model across all predictions, relevant when the classes are symmetric in size and the costs of false positives and false negatives are similar.
@@ -128,7 +128,7 @@ print(f"Accuracy: {accuracy_score(y_test, y_pred):.2f}, Precision: {metrics[0]:.
 
 We further expanded our exploration of machine learning models for predicting sentence difficulties by implementing a Decision Tree algorithm. This classification method predicts the difficulty level of sentences by constructing a model that learns simple decision rules from the data features. In our application, the model is visualized as a tree structure: each internal node represents a "test" related to an attribute of the sentence, such as the presence of specific words or the complexity of the sentence structure. Each branch stemming from these nodes denotes the outcome of the test, and each leaf node corresponds to a class label, which in this case is the predicted difficulty level. This hierarchical approach allows the Decision Tree to make clear and logical decisions based on the hierarchical significance of sentence features, making it both interpretable and effective for tasks with well-defined rules and distinctions between categories.
 
-Using the 80/20 split technique again, we obtained results as shown in the table above, which suggest an even distribution among the classes and types of errors. However, the model still produces poor predictive results, with an accuracy of 31%.
+Performing the 80/20 split technique again, we obtained results as shown in the table above, which suggest an even distribution among the classes and types of errors. However, the model still produces poor predictive results, with an accuracy of 31%.
 
 Upon examining the confusion matrix, we observed that the model struggles to discern subtle difficulty distinctions, resulting in a significant number of false positives and negatives. This suggests an overfitting issue where the model captures noise instead of actual difficulty boundaries.   
 
@@ -170,9 +170,13 @@ print(f"Precision: {precision:.2f}, Recall: {recall:.2f}, F1-Score: {f1_score:.2
 ```
 ### Random Forest
 
-Continuing with our exploration of machine learning techniques for predicting sentence difficulties, we implemented the Random Forest algorithm. This advanced classification method extends the concept of decision trees by creating an ensemble of decision trees trained on different subsets of the data and using different subsets of features at each split within those trees. Each tree in the forest makes its own prediction, and the final output is determined by the majority vote across all trees. This approach not only enhances the predictive accuracy by reducing the risk of overfitting associated with single decision trees but also maintains good interpretability, as it allows for an analysis of feature importance across multiple trees. Random Forest is particularly robust and effective in dealing with both large datasets and datasets with a high dimensionality of features, making it well-suited for complex classification tasks like predicting the difficulty of sentences.
+Continuing with our exploration of machine learning techniques for predicting sentence difficulties, we implemented the Random Forest algorithm. This advanced classification method extends the concept of decision trees by creating an ensemble of decision trees trained on different subsets of the data and using different subsets of features at each split within those trees. Each tree in the forest makes its own prediction, and the final output is determined by the majority vote across all trees. This approach not only enhances the predictive accuracy by reducing the risk of overfitting associated with single decision trees but also maintains good interpretability, as it allows for an analysis of feature importance across multiple trees. Random Forest is particularly robust and effective in dealing with both large datasets and datasets with high dimensionality of features, making it well-suited for complex classification tasks like predicting the difficulty of sentences.
 
+Through the 80/20 split, we got the results yielded in the introduction table, suggesting sightly better prediction capabilities with a precision of 39% than identification with a recall of 37%. We can see that the Random Forest, as expected, performs better than the other classification model, indicating better suitability to high dimensionality and overfitting. 
 
+When looking at the confusion matrix, we see as with the other classification method that the algorithm mainly predicts the A1 difficulty, resulting in greater false positives. Those results again suggest misscalification due to improper feature selection.
+
+<img width="500" alt="Capture d’écran 2024-05-19 à 17 23 56" src="https://github.com/igordall/EPFL_IKEA/assets/153678341/689f454c-6e9e-4972-86c2-de19aa5f603b">
 
 
 
