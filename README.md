@@ -178,7 +178,7 @@ When looking at the confusion matrix, we see as with the other classification me
 
 <img width="500" alt="Capture d’écran 2024-05-19 à 17 23 56" src="https://github.com/igordall/EPFL_IKEA/assets/153678341/689f454c-6e9e-4972-86c2-de19aa5f603b">
 
-
+Looking at mistakes more closely, we will again the top 10 features influencing decision-making ...
 
 ```python
 import pandas as pd
