@@ -12,7 +12,7 @@ We used the following datasets for training and evaluating our model:
 - **Unlabelled Test Data:** [Test Dataset](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/unlabelled_test_data.csv)
 - **Sample Submission:** [Sample Submission File](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/sample_submission.csv)
 - **Additional Sentences:** [French Sentences](https://raw.githubusercontent.com/AlexPinel06/Team-IKEA-ML/main/data/french_sentences_realistic.csv)
---> add description on data 
+- --> add description on data 
 
 ## Model Development and Performance
 
