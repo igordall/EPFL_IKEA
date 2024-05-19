@@ -36,7 +36,7 @@ We assess our models using key metrics to ensure precision, recall, F1-score, an
 |                  | Logistic Regression | KNN     | Decision Tree | Random Forest | Camembert |
 |------------------|---------------------|---------|---------------|---------------|-----------|
 | Precision        |         0.44        |   0.29  |      0.31     |      0.37     |      -    |
-| Recall           |         0.45        |   0.19  |      0.31     |      0.39     |      -    |
+| Recall           |         0.45        |   0.20  |      0.31     |      0.39     |      -    |
 | F1-score         |         0.44        |   0.11  |      0.31     |      0.37     |      -    |
 | Accuracy         |         0.45        |   0.20  |      0.31     |      0.35     |      -    |
 
@@ -55,7 +55,7 @@ To delve deeper into where the model may be going wrong, we analyzed the confusi
 
 <img width="500" alt="Capture d’écran 2024-05-18 à 16 56 37" src="https://github.com/igordall/EPFL_IKEA/assets/153678341/a8df770f-2c11-4a0e-b3fa-660cbdb4f858">
 
-A case in point is the misclassified sentence "Un service précieux qui a sans doute permis de sauver des vies," incorrectly labeled as C1 instead of its actual difficulty of A2. Analysis of its vectorization and contributing predictors shows that the most influential features leading to the incorrect C1 classification were common determiners and prepositions like "des," "sa," "les," "de," and "du." These frequently used words are typically neutral concerning difficulty and indicate that the model might struggle with capturing the nuances of technical vocabulary, grammar, or punctuation. Notably, attempts to improve model performance by removing these "stop words" resulted in poorer outcomes, suggesting that common words still hold significant predictive value. Nevertheless, the model does recognize that longer sentences generally pose more difficulty, as evidenced by correctly classifying the complex sentence: "En attribuant une valeur de flux potentiel aux liens du graphe, la segmentation fondée sur le critère de modularité aboutit à un découpage considéré comme optimal du point de vue de la dynamique démographique interne à chaque compartiment."
+A case in point is the misclassified sentence "Un service précieux qui a sans doute permis de sauver des vies," incorrectly labeled as C1 instead of its actual difficulty of A2. Analysis of its vectorization and contributing predictors shows that the most influential features leading to the incorrect C1 classification were common determiners and prepositions like 'des', 'sa', 'les', 'de', and 'du'. These frequently used words are typically neutral concerning difficulty and indicate that the model might struggle with capturing the nuances of technical vocabulary, grammar, or punctuation. Notably, attempts to improve model performance by removing these "stop words" resulted in poorer outcomes, suggesting that common words still hold significant predictive value. Nevertheless, the model does recognize that longer sentences generally pose more difficulty, as evidenced by correctly classifying the complex sentence: "En attribuant une valeur de flux potentiel aux liens du graphe, la segmentation fondée sur le critère de modularité aboutit à un découpage considéré comme optimal du point de vue de la dynamique démographique interne à chaque compartiment."
 
 These insights highlight the need for further refinement to better distinguish between linguistic complexity and commonplace vocabulary in our model. Below is the code we used for this analysis:
 
@@ -90,13 +90,13 @@ print(f"Precision: {metrics[0]:.2f}, Recall: {metrics[1]:.2f}, F1-Score: {metric
 
 Following our use of Logistic Regression, we explored another approach using the k-Nearest Neighbors (kNN) classification algorithm to predict sentence difficulties. This method categorizes sentences by assigning them to predefined difficulty levels based on their features. Specifically, kNN operates by identifying a specified number of training examples that are closest to a new sentence in terms of feature similarity—such as sentence length and complexity. It then predicts the difficulty level of the new sentence based on the most common categories among these nearest neighbors. This method relies heavily on the assumption that similar sentences share similar difficulty levels, making it particularly effective when clear patterns of similarity exist within the data.
 
-Using the 80/20 split technique again, we obtained the results presented in the initial table. The outcome suggests poor prediction performance, with a Precision of 29%. However, the identification capabilities are even lower, with a Recall of 19%, resulting in more false positives than false negatives.
+Using the 80/20 split technique again, we obtained the results presented in the initial table. The outcome suggests poor prediction performance, with a Precision of 29%. However, the identification capabilities are even lower, with a Recall of 20%, resulting in more false positives than false negatives.
 
-Examining the confusion matrix provides insights into why the model fails to properly assess difficulty. It reveals that the vast majority of predictions are for A1, resulting in many false positives. The model's performance may be hindered by the high dimensionality of text data, which results from the large number of features derived from each word, making it harder to identify clear patterns. This stresses the poor scalability of the kNN model.
+Examining the confusion matrix provides insights into why the model fails to properly assess difficulty. It reveals that the vast majority of predictions are for A1, resulting in many false positives. The model’s performance might be hindered by the high dimensionality of text data, which results from the large number of features derived from each word. This complexity makes it more challenging to identify clear patterns and accurately find nearest neighbors. This stresses the poor scalability of the kNN model.
 
 <img width="500" alt="Capture d’écran 2024-05-18 à 19 12 59" src="https://github.com/igordall/EPFL_IKEA/assets/153678341/ca1916f7-1333-440d-a50d-28909fa3c0e5">
 
-To delve deeper, we plotted the most frequent words in misclassified sentences, which include words like "de," "la," "et," and "les," even after excluding stop words. This shows that our model is overly influenced by common French articles, prepositions, and conjunctions, leading to clustering around the A1 prediction. Indeed, the algorithm struggles with noisy labels and irrelevant features, such as propositions, which complicate difficult predictions. For instance, the misclassified C1 sentence, "La raison de cette ambivalence précède l'existence des robots et même leur nom: elle est culturelle et se cache dans le vieux mythe du Golem remis à l'honneur en Occident par Frankenstein de Mary Shelley en 1818," contains several occurrences of "de," "la," and "et."
+To delve deeper, we analyzed the most frequent words in misclassified sentences (stop words excluded while counting), including words like 'plus', 'comme', 'cette', and 'si', even after excluding stop words into the model—which, once more, resulted in a poorer outcome. This shows that our model is overly influenced by common French adverb, adjective, and conjunctions, leading to clustering around the A1 prediction. Indeed, the concept of the "nearest" neighbor becomes less meaningful. Distances between points (words/ sentences) can become uniformly large or not sufficiently distinct to discern close from distant neighbors effectively. For instance, the sentence B2 was wrongly classified as A2, "Si cette dernière innovation voyait le jour, une de ses applications serait tout aussi impressionnante et inquiétante." contains occurrences of 'cette', and 'si'.
 
 These results demonstrate that kNN is not well-suited for handling the complexities of written text. Below is the code used for this analysis:
 ```python
@@ -128,9 +128,13 @@ print(f"Accuracy: {accuracy_score(y_test, y_pred):.2f}, Precision: {metrics[0]:.
 
 We further expanded our exploration of machine learning models for predicting sentence difficulties by implementing a Decision Tree algorithm. This classification method predicts the difficulty level of sentences by constructing a model that learns simple decision rules from the data features. In our application, the model is visualized as a tree structure: each internal node represents a "test" related to an attribute of the sentence, such as the presence of specific words or the complexity of the sentence structure. Each branch stemming from these nodes denotes the outcome of the test, and each leaf node corresponds to a class label, which in this case is the predicted difficulty level. This hierarchical approach allows the Decision Tree to make clear and logical decisions based on the hierarchical significance of sentence features, making it both interpretable and effective for tasks with well-defined rules and distinctions between categories.
 
-Again using the 80/20 technique yielded the results from the table above, suggesting an even distribution among the classes and types of errors. 
+Again using the 80/20 technique yielded the results from the table above, suggesting an even distribution among the classes and types of errors. The model once more produces poor predicting results, having an accuracy of 31%. 
+
+Diving into the confusion matrix, we spot that the model struggles to point out difficulty subtilities, having a lot of false positives and negatives. This suggests an overfitting issue where the model captures noise rather than actual difficulty boundaries.   
 
 <img width="500" alt="Capture d’écran 2024-05-19 à 10 31 28" src="https://github.com/igordall/EPFL_IKEA/assets/153678341/4c4e5dee-f5c1-4925-a2ea-53558e75a6c2">
+
+
 
 ```python
 import pandas as pd
