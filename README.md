@@ -98,7 +98,7 @@ Examining the confusion matrix provides insights into why the model fails to pro
 
 To delve deeper, we analyzed the most frequent words in misclassified sentences (stop words excluded while counting), including words like 'plus', 'comme', 'cette', and 'si', even after excluding stop words into the model—which, once more, resulted in a poorer outcome. This shows that our model is overly influenced by common French adverb, adjective, and conjunctions, leading to clustering around the A1 prediction. Indeed, the concept of the "nearest" neighbor becomes less meaningful. Distances between points (words/ sentences) can become uniformly large or not sufficiently distinct to discern close from distant neighbors effectively. For instance, the sentence B2 was wrongly classified as A2, "Si cette dernière innovation voyait le jour, une de ses applications serait tout aussi impressionnante et inquiétante." contains occurrences of 'cette', and 'si'.
 
-These results demonstrate that kNN is not well-suited for handling the complexities of written text. Below is the code used for this analysis:
+These results demonstrate that kNN is not well-suited for handling the complexities of written text. Here is the code we used for our analysis:
 ```python
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
@@ -136,7 +136,7 @@ Upon examining the confusion matrix, we observed that the model struggles to dis
 
 To analyze the erroneous predictions more closely, we examined the top 10 features that most significantly influence decision-making. Notably, these features include common French words such as 'de', 'la', 'les', and 'et'. Once again, excluding these stop words proved detrimental to the results, underscoring that our model is heavily influenced by common French articles, prepositions, and conjunctions. This leads to misinterpretations of true language difficulties because the distinctions are not well-defined, due to the algorithm's struggle with noisy labels and irrelevant features such as articles and propositions. Furthermore, because the model tends to overestimate the importance of common words, small variations in the data can result in the generation of a completely different decision tree.
 
-These issues highlight the inherent limitations of such classification algorithms in addressing our predictive tasks. Below is the code used for our analysis:
+These issues highlight the inherent limitations of such classification algorithms in addressing our predictive tasks. The code utilized for our analysis is provided below:
 
 ```python
 import pandas as pd
@@ -172,13 +172,15 @@ print(f"Precision: {precision:.2f}, Recall: {recall:.2f}, F1-Score: {f1_score:.2
 
 Continuing with our exploration of machine learning techniques for predicting sentence difficulties, we implemented the Random Forest algorithm. This advanced classification method extends the concept of decision trees by creating an ensemble of decision trees trained on different subsets of the data and using different subsets of features at each split within those trees. Each tree in the forest makes its own prediction, and the final output is determined by the majority vote across all trees. This approach not only enhances the predictive accuracy by reducing the risk of overfitting associated with single decision trees but also maintains good interpretability, as it allows for an analysis of feature importance across multiple trees. Random Forest is particularly robust and effective in dealing with both large datasets and datasets with high dimensionality of features, making it well-suited for complex classification tasks like predicting the difficulty of sentences.
 
-Through the 80/20 split, we got the results yielded in the introduction table, suggesting sightly better prediction capabilities with a precision of 39% than identification with a recall of 37%. We can see that the Random Forest, as expected, performs better than the other classification model, indicating better suitability to high dimensionality and overfitting. 
+The 80/20 split yielded results, as shown in the introductory table, with a precision of 39% suggesting slightly better predictive capabilities compared to a recall of 37% for identification. We can see that the Random Forest, as expected, performs better than the other classification model, indicating better suitability to high dimensionality and overfitting. 
 
-When looking at the confusion matrix, we see as with the other classification method that the algorithm mainly predicts the A1 difficulty, resulting in greater false positives. Those results again suggest misscalification due to improper feature selection.
+When examining the confusion matrix, similar to other classification methods, we noted that the algorithm predominantly predicts the A1 difficulty, leading to a higher number of false positives. These results suggest misclassification due to improper feature selection.
 
 <img width="500" alt="Capture d’écran 2024-05-19 à 17 23 56" src="https://github.com/igordall/EPFL_IKEA/assets/153678341/689f454c-6e9e-4972-86c2-de19aa5f603b">
 
-Looking at mistakes more closely, we will again the top 10 features influencing decision-making ...
+To further investigate the errors, we analyzed the top 10 features influencing decision-making. Common articles and prepositions ('de', 'les', 'la', etc.) were identified, indicating that even the more robust model still tends to overestimate common words in predicting difficulty. Although the model shows improvement, it still exhibits inherent weaknesses typical of classification models. This has led us to consider transitioning to another type of algorithm for our prediction tasks.
+
+You can find the code for our analysis detailed below:
 
 ```python
 import pandas as pd
