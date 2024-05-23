@@ -13,7 +13,7 @@ The ability to correctly match text difficulty with a learner's proficiency leve
 The foundation of our project is a dataset consisting of 4,800 French sentences, each tagged with a CEFR difficulty level. We utilized the following datasets throughout our project:
 
 - **Training Data:** Contains the sentences used to train our models. [Access the Training Dataset](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/training_data.csv)
-- **Unlabelled Test Data:** Used for predicting sentence difficulty as part of the competition based on accuracy. [Access the Test Dataset](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/unlabelled_test_data.csv)
+- **Unlabelled Test Data:** Used for predicting sentence difficulty as part of the competition based on accuracy score. [Access the Test Dataset](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/unlabelled_test_data.csv)
 - **Sample Submission:** Demonstrates the submission format for the competition. [Download the Sample Submission File](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/sample_submission.csv)
 
 ## Model Development and Performance
