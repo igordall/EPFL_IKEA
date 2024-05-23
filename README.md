@@ -35,10 +35,10 @@ We assess our models using key metrics to ensure precision, recall, F1-score, an
 
 |                  | Logistic Regression | KNN     | Decision Tree | Random Forest | Camembert |
 |------------------|---------------------|---------|---------------|---------------|-----------|
-| Precision        |         0.44        |   0.29  |      0.31     |      0.39     |      -    |
-| Recall           |         0.45        |   0.20  |      0.31     |      0.37     |      -    |
-| F1-score         |         0.44        |   0.11  |      0.31     |      0.35     |      -    |
-| Accuracy         |         0.45        |   0.20  |      0.31     |      0.37     |      -    |
+| Precision        |         0.44        |   0.29  |      0.31     |      0.39     |   0.82    |
+| Recall           |         0.45        |   0.20  |      0.31     |      0.37     |   0.82    |
+| F1-score         |         0.44        |   0.11  |      0.31     |      0.35     |   0.82    |
+| Accuracy         |         0.45        |   0.20  |      0.31     |      0.37     |   0.82    |
 
 
 Understanding the differences in these metrics is crucial for comprehending model performance. **Precision** quantifies the accuracy of positive <u>predictions</u>, highlighting the proportion of true positives among all positive predictions. **Recall** assesses the model's ability to identify all relevant instances, focusing on the proportion of actual positives correctly identified. **F1-score** balances precision and recall, useful in situations with uneven class distributions. **Accuracy** reflects the overall correctness of the model across all predictions, relevant when the classes are symmetric in size and the costs of false positives and false negatives are similar.
@@ -170,7 +170,7 @@ print(f"Precision: {precision:.2f}, Recall: {recall:.2f}, F1-Score: {f1_score:.2
 ```
 ### Random Forest
 
-Continuing with our exploration of machine learning techniques for predicting sentence difficulties, we implemented the Random Forest algorithm. This advanced classification method extends the concept of decision trees by creating an ensemble of decision trees trained on different subsets of the data and using different subsets of features at each split within those trees. Each tree in the forest makes its own prediction, and the final output is determined by the majority vote across all trees. This approach not only enhances the predictive accuracy by reducing the risk of overfitting associated with single decision trees but also maintains good interpretability, as it allows for an analysis of feature importance across multiple trees. Random Forest is particularly robust and effective in dealing with both large datasets and datasets with high dimensionality of features, making it well-suited for complex classification tasks like predicting the difficulty of sentences.
+Continuing with our exploration of machine learning techniques for predicting sentence difficulties, we implemented the Random Forest algorithm. This advanced classification method extends the concept of decision trees by creating an ensemble of decision trees trained on different subsets of the data and using different subsets of features at each split within those trees. Each tree in the forest makes its own prediction, and the majority vote across all trees determines the final output. This approach not only enhances the predictive accuracy by reducing the risk of overfitting associated with single decision trees but also maintains good interpretability, as it allows for an analysis of feature importance across multiple trees. Random Forest is particularly robust and effective in dealing with both large datasets and datasets with high dimensionality of features, making it well-suited for complex classification tasks like predicting the difficulty of sentences.
 
 The 80/20 split yielded results, as shown in the introductory table, with a precision of 39% suggesting slightly better predictive capabilities compared to a recall of 37% for identification. We can see that the Random Forest, as expected, performs better than the other classification model, indicating better suitability to high dimensionality and overfitting. 
 
@@ -208,12 +208,36 @@ print(f"Precision: {metrics[0]:.2f}, Recall: {metrics[1]:.2f}, F1-Score: {metric
 ```
 ### Camembert
 
+Based on the insights gained from previous results, we shifted our focus away from traditional machine learning models. Our exploration led us to the BERT model, discovered through Che-Jui Huang's 2022 Medium article, "[NLP] Project Review: Text Difficulty Classification." Unlike most linguistic models that process text unidirectionally, BERT, developed by Google, adopts a bidirectional approach. This means it reads and interprets text from both left to right and right to left simultaneously, allowing for a comprehensive understanding of context.
 
-Coming ...
+In practical application, BERT evaluates the context surrounding each word by considering the words that precede and follow it. For example, in the French sentence "Je pars faire de la voile," BERT analyzes both "faire" and "la" when assessing the word "de." This deep contextual understanding enables BERT to accurately interpret grammatical roles and nuanced language use, such as determiners, more effectively than previous models. Initially, deploying BERT on our training dataset achieved an accuracy of 56%.
+
+Unsatisfied with these results, we implemented a three-step enhancement strategy, leading to the improved outcomes reported in the initial table of 82%. These steps included data augmentation, hyperparameter optimization, and full-dataset training, ultimately yielding a final competition score of 0.611 on external data.
+
+**Data Augmentation:**
+We applied a two-pronged approach to data augmentation:
+
+Synonym Replacement: Utilizing the WordNet database, we developed a function to find French synonyms, thereby expanding our dataset with alternative but semantically similar words. When no synonyms were available, the original word was retained.
+Masking and Prediction: Using BERT’s predictive capabilities, we randomly masked words in sentences and allowed the model to infer suitable replacements based on the contextual clues from surrounding words. This not only diversified the sentence structures but also maintained the integrity of their original difficulty levels.
+By doubling the dataset size through these methods, we enhanced its robustness and variability without sacrificing quality, thereby avoiding overfitting and maintaining realistic data variations.
+
+**Hyperparameter Optimization:**
+Hyperparameters are parameters whose values are set before the learning process begins and are not updated during training such as number of epochs, batch size, learning rate, etc. Using Optuna, we fine-tuned various model parameters identifying the optimal configuration that maximized performance on our specific tasks and dataset.
+
+**Full-Dataset Training:**
+Before entering the competition, we re-trained our model on the entire dataset, incorporating the 20% previously reserved for testing. This comprehensive exposure to all available data ensured that our model was well-prepared and had encountered the broadest possible spectrum of scenarios before facing the competition’s external dataset.
+
+In summary, through careful data augmentation, meticulous hyperparameter tuning, and comprehensive training on the entire dataset, we significantly enhanced our model's performance, demonstrating robustness and adaptability in both controlled tests and competitive environments. These efforts improved the model's accuracy on an 80/20 data split to 82%, compared with a competition accuracy of 61%. This disparity suggests that while our data augmentation effectively increased the model's performance in a controlled setting, it may not have fully captured the broader nuances of the language required for the varied challenges presented in the competition.
 
 
 
 
+
+
+
+
+
+ 
 
 
 
