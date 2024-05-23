@@ -208,7 +208,7 @@ print(f"Precision: {metrics[0]:.2f}, Recall: {metrics[1]:.2f}, F1-Score: {metric
 ```
 ### Camembert
 
-Based on the insights gained from previous results, we shifted our focus away from traditional machine learning models. Our exploration led us to the BERT model, discovered through Che-Jui Huang's 2022 Medium article, "[NLP] Project Review: Text Difficulty Classification." Unlike most linguistic models that process text unidirectionally, BERT, developed by Google, adopts a bidirectional approach. This means it reads and interprets text from both left to right and right to left simultaneously, allowing for a comprehensive understanding of context.
+Based on the insights gained from previous results, we shifted our focus away from traditional machine learning models. Our exploration led us to the BERT model, discovered through Che-Jui Huang's 2022 Medium article, "[NLP] Project Review: Text Difficulty Classification." Unlike most linguistic models that process text unidirectionally, BERT, developed by Google, adopts a bidirectional approach. This means it reads and interprets text from both left to right and right to left simultaneously, allowing for a comprehensive understanding of context. For our specific case, we utilized Camembert, the French pre-trained model, to better handle the nuances of the French language.
 
 In practical application, BERT evaluates the context surrounding each word by considering the words that precede and follow it. For example, in the French sentence "Je pars faire de la voile," BERT analyzes both "faire" and "la" when assessing the word "de." This deep contextual understanding enables BERT to accurately interpret grammatical roles and nuanced language use, such as determiners, more effectively than previous models. Initially, deploying BERT on our training dataset achieved an accuracy of 56%.
 
@@ -230,9 +230,190 @@ Before entering the competition, we re-trained our model on the entire dataset, 
 In summary, through careful data augmentation, meticulous hyperparameter tuning, and comprehensive training on the entire dataset, we significantly enhanced our model's performance, demonstrating robustness and adaptability in both controlled tests and competitive environments. These efforts improved the model's accuracy on an 80/20 data split to 82%, compared with a competition accuracy of 61%. This disparity suggests that while our data augmentation effectively increased the model's performance in a controlled setting, it may not have fully captured the broader nuances of the language required for the varied challenges presented in the competition.
 
 
-
+Find below the code for Data Augmentation and Preparation: 
 ```python
+def synonyms(word, lang='fra'):
+    synsets = wordnet.synsets(word, lang=lang)
+    synonyms = set()
+    for synset in synsets:
+        for lemma in synset.lemma_names('fra'):
+            synonyms.add(lemma.replace('_', ' '))
+    return list(synonyms)
 
+def replace_with_synonyms(sentence, lang='fra'):
+    words = sentence.split()
+    new_words = []
+    for word in words:
+        syns = synonyms(word, lang)
+        if syns:
+            new_word = random.choice(syns)
+            new_words.append(new_word)
+        else:
+            new_words.append(word)
+    return ' '.join(new_words)
+
+def mask_and_predict(sentence):
+    words = sentence.split()
+    masked_index = random.randint(0, len(words) - 1)
+    words[masked_index] = '[MASK]'
+    masked_sentence = ' '.join(words)
+    tokenized_text = tokenizer_bert(masked_sentence, return_tensors='pt')
+    with torch.no_grad():
+        outputs = model_bert(**tokenized_text)
+        predictions = outputs.logits
+    predicted_index = torch.argmax(predictions[0, masked_index]).item()
+    predicted_token = tokenizer_bert.decode([predicted_index])
+    words[masked_index] = predicted_token
+    return ' '.join(words)
+
+def encode_features(df):
+    label_encoder = LabelEncoder()
+    df['difficulty_encoded'] = label_encoder.fit_transform(df['difficulty'])
+    df['text_length'] = df['sentence'].apply(len)
+    df['punctuation_count'] = df['sentence'].apply(lambda x: len(re.findall(r'[^\w\s]', x)))
+    return df, label_encoder
+
+def encode_text(data, tokenizer):
+    sentences = data['sentence'].tolist()
+    encodings = tokenizer(sentences, padding='max_length', truncation=True, max_length=128)
+    encodings['text_length'] = torch.tensor(data['text_length'].tolist())
+    encodings['punctuation_count'] = torch.tensor(data['punctuation_count'].tolist())
+    return encodings
+df_training = augment_dataframe(df_training)
+df_training, label_encoder = encode_features(df_training)
+train_df, val_df = train_test_split(df_training, test_size=0.2, random_state=42)
+train_encodings = encode_text(train_df, tokenizer_camembert)
+val_encodings = encode_text(val_df, tokenizer_camembert)
+class TextDataset(torch.utils.data.Dataset):
+    def __init__(self, encodings, labels):
+        self.encodings = encodings
+        self.labels = labels
+
+    def __getitem__(self, idx):
+        item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
+        item['labels'] = torch.tensor(self.labels[idx])
+        return item
+
+    def __len__(self):
+        return len(self.labels)
+
+train_dataset = TextDataset(train_encodings, train_df['difficulty_encoded'].tolist())
+val_dataset = TextDataset(val_encodings, val_df['difficulty_encoded'].tolist())
+```
+
+Find below the code for the hyperparameters optimization: 
+```python
+def compute_metrics(eval_pred):
+    logits, labels = eval_pred
+    predictions = np.argmax(logits, axis=-1)
+    return {'accuracy': accuracy_score(labels, predictions)}
+
+def objective(trial):
+    model = CamembertForSequenceClassification.from_pretrained('camembert-base', num_labels=len(label_encoder.classes_))
+    training_args = TrainingArguments(
+        output_dir='./results',
+        num_train_epochs=6,
+        per_device_train_batch_size=trial.suggest_int('per_device_train_batch_size', 4, 16),
+        per_device_eval_batch_size=16,
+        warmup_steps=trial.suggest_int('warmup_steps', 0, 500),
+        weight_decay=trial.suggest_float('weight_decay', 0.0, 0.3),
+        logging_dir='./logs',
+        logging_steps=10,
+        evaluation_strategy='epoch'
+    )
+
+    trainer = Trainer(
+        model=model,
+        args=training_args,
+        train_dataset=train_dataset,
+        eval_dataset=val_dataset,
+        compute_metrics=compute_metrics
+    )
+
+    trainer.train()
+    eval_results = trainer.evaluate()
+    return eval_results['eval_accuracy']
+
+study = optuna.create_study(direction='maximize')
+study.optimize(objective, n_trials=6)
+best_hyperparameters = study.best_params
+print(best_hyperparameters)
+```
+Here Beloow how we trained the model with the best parameters: 
+```python
+model = CamembertForSequenceClassification.from_pretrained('camembert-base', num_labels=len(label_encoder.classes_))
+training_args = TrainingArguments(
+    output_dir='./results',
+    num_train_epochs=10,
+    per_device_train_batch_size=best_hyperparameters['per_device_train_batch_size'],
+    per_device_eval_batch_size=16,
+    warmup_steps=best_hyperparameters['warmup_steps'],
+    weight_decay=best_hyperparameters['weight_decay'],
+    logging_dir='./logs',
+    logging_steps=10,
+    evaluation_strategy='epoch'
+)
+
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=val_dataset,
+    compute_metrics=compute_metrics
+)
+
+trainer.train()
+results = trainer.evaluate()
+print("Accuracy:", results['eval_accuracy'])
+```
+Below 
+```python
+df_t = df_test.copy()
+
+if 'sentence' not in df_t.columns:
+    raise KeyError("La colonne 'sentence' n'existe pas dans le DataFrame de test.")
+if 'id' not in df_t.columns:
+    df_t['id'] = np.arange(len(df_t))
+
+
+df_t['text_length'] = df_t['sentence'].apply(len)
+df_t['punctuation_count'] = df_t['sentence'].apply(lambda x: len(re.findall(r'[^\w\s]', x)))
+
+
+test_encodings = encode_text(df_t, tokenizer_camembert)
+
+
+class TestDataset(torch.utils.data.Dataset):
+    def __init__(self, encodings):
+        self.encodings = encodings
+
+    def __getitem__(self, idx):
+        item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
+        return item
+
+    def __len__(self):
+        return len(self.encodings['input_ids'])
+
+test_dataset = TestDataset(test_encodings)
+
+
+test_predictions = trainer.predict(test_dataset)
+
+
+predicted_classes = np.argmax(test_predictions.predictions, axis=-1)
+
+
+predicted_labels = label_encoder.inverse_transform(predicted_classes)
+
+
+df_results = pd.DataFrame({
+    'id': df_t['id'],
+    'difficulty': predicted_labels
+})
+
+
+df_results.to_csv('prediction_results.csv', index=False)
+print("Results saved to prediction_results.csv")
 ```
 
 
