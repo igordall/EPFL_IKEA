@@ -338,7 +338,7 @@ study.optimize(objective, n_trials=6)
 best_hyperparameters = study.best_params
 print(best_hyperparameters)
 ```
-Here below, how we trained the model with the best parameters: 
+Here below, is how we trained the model with the best parameters on the whole training dataset: 
 ```python
 model = CamembertForSequenceClassification.from_pretrained('camembert-base', num_labels=len(label_encoder.classes_))
 training_args = TrainingArguments(
@@ -365,68 +365,3 @@ trainer.train()
 results = trainer.evaluate()
 print("Accuracy:", results['eval_accuracy'])
 ```
-Below ...: 
-```python
-df_t = df_test.copy()
-
-if 'sentence' not in df_t.columns:
-    raise KeyError("La colonne 'sentence' n'existe pas dans le DataFrame de test.")
-if 'id' not in df_t.columns:
-    df_t['id'] = np.arange(len(df_t))
-
-
-df_t['text_length'] = df_t['sentence'].apply(len)
-df_t['punctuation_count'] = df_t['sentence'].apply(lambda x: len(re.findall(r'[^\w\s]', x)))
-
-
-test_encodings = encode_text(df_t, tokenizer_camembert)
-
-
-class TestDataset(torch.utils.data.Dataset):
-    def __init__(self, encodings):
-        self.encodings = encodings
-
-    def __getitem__(self, idx):
-        item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
-        return item
-
-    def __len__(self):
-        return len(self.encodings['input_ids'])
-
-test_dataset = TestDataset(test_encodings)
-
-
-test_predictions = trainer.predict(test_dataset)
-
-
-predicted_classes = np.argmax(test_predictions.predictions, axis=-1)
-
-
-predicted_labels = label_encoder.inverse_transform(predicted_classes)
-
-
-df_results = pd.DataFrame({
-    'id': df_t['id'],
-    'difficulty': predicted_labels
-})
-
-
-df_results.to_csv('prediction_results.csv', index=False)
-print("Results saved to prediction_results.csv")
-```
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
