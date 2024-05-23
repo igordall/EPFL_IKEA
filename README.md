@@ -368,3 +368,19 @@ trainer.train()
 results = trainer.evaluate()
 print("Accuracy:", results['eval_accuracy'])
 ```
+## Conclusion
+
+EPFL_IKEA represents a significant step forward in applying AI to language learning. Our model not only facilitates better learning experiences by ensuring content appropriateness but also demonstrates the potential of AI in educational settings. We continue to refine our approach, aiming to broaden its application and assist an even larger audience of French language learners.
+
+### Further Consideration 
+
+To further enhance the effectiveness and accuracy of our model, we are considering several key improvements:
+
+- Expanding the Dataset: Increasing the volume and variety of training data can help improve the model's robustness and its ability to generalize across a broader spectrum of text complexities. More data can particularly help in refining the nuances between closely rated difficulty levels.
+
+- Diverse Language Sources: Integrating texts from a wider range of sources, including newspapers, literature, and academic articles, could provide a richer linguistic context, helping the model learn more complex patterns and styles of language use.
+
+- User Feedback Integration: Incorporating user feedback into the training process can dynamically adapt the model to real-world effectiveness and user satisfaction, thereby continuously improving the prediction accuracy.
+
+By focusing on these areas, we aim to make our tool even more effective and versatile, supporting a wider range of learners in achieving their language proficiency goals.
+
