@@ -11,7 +11,6 @@ We used the following datasets for training and evaluating our model:
 - **Training Data:** [Training Dataset](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/training_data.csv)
 - **Unlabelled Test Data:** [Test Dataset](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/unlabelled_test_data.csv)
 - **Sample Submission:** [Sample Submission File](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/sample_submission.csv)
-- **Additional Sentences:** [French Sentences](https://raw.githubusercontent.com/AlexPinel06/Team-IKEA-ML/main/data/french_sentences_realistic.csv)
 - --> add description on data 
 
 ## Model Development and Performance
@@ -339,7 +338,7 @@ study.optimize(objective, n_trials=6)
 best_hyperparameters = study.best_params
 print(best_hyperparameters)
 ```
-Here Beloow how we trained the model with the best parameters: 
+Here below, how we trained the model with the best parameters: 
 ```python
 model = CamembertForSequenceClassification.from_pretrained('camembert-base', num_labels=len(label_encoder.classes_))
 training_args = TrainingArguments(
@@ -366,7 +365,7 @@ trainer.train()
 results = trainer.evaluate()
 print("Accuracy:", results['eval_accuracy'])
 ```
-Below 
+Below ...: 
 ```python
 df_t = df_test.copy()
 
