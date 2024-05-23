@@ -7,9 +7,9 @@ In this project, Alex and I harness artificial intelligence to predict the diffi
 ## Data Resources
 For our project, we trained various models using a specialized dataset comprised of 4,800 French sentences, each labeled with a difficulty level ranging from A1 to C2. These models were evaluated through a competition where we predicted the difficulty levels of an unlabelled dataset. The results were submitted to Kaggle for scoring. Below are the links to the datasets used in our study:
 
-- **Training Data:** This dataset includes the French sentences used for training our models. Access the [Training Dataset](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/training_data.csv)Training Data: This dataset includes the French sentences used for training our models. Access the Training Data
+- **Training Data:** This dataset includes the French sentences used for training our models. Access the [Training Dataset](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/training_data.csv)
 - **Unlabelled Test Data:** We used this dataset for predicting sentence difficulty as part of the competition. Access the [Test Dataset](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/unlabelled_test_data.csv)
-- **Sample Submission:** This file serves as a template illustrating the required format for our competition submissions. Download the [Sample Submission File](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/sample_submission.csv) T
+- **Sample Submission:** This file serves as a template illustrating the required format for our competition submissions. Download the [Sample Submission File](https://raw.githubusercontent.com/pinoulex/Team-IKEA-ML/main/data/sample_submission.csv)
 
 These resources are integral to our ongoing efforts to refine and validate our models.
 ## Model Development and Performance
